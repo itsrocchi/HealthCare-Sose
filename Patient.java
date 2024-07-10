@@ -24,4 +24,12 @@ public class Patient {
     public void setCF(String CF) {
         this.CF = CF;
     }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getAddress() {
+        return address;
+    }
 }
