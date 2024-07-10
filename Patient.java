@@ -20,4 +20,8 @@ public class Patient {
     public String getCF() {
         return CF;
     }
+
+    public void setCF(String CF) {
+        this.CF = CF;
+    }
 }
