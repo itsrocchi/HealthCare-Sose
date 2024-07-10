@@ -16,4 +16,8 @@ public class Patient {
     public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
     }
+
+    public String getCF() {
+        return CF;
+    }
 }
