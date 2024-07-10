@@ -4,18 +4,19 @@ import it.univaq.sose.medicalHistoryService.model.MedicalRecord;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
-
-/*todo fix the id stuff*/
 
 @RestController
 @RequestMapping("/mhs")
 public class mhsController {
 
     // Simulazione di un repository in memoria per i record medici
-    private Map<Long, MedicalRecord> medicalRecords = new HashMap<>();
+    private final RestTemplate restTemplate = new RestTemplate();
+    private final String patientServiceUrl = "http://localhost:8080/prs/patientData/";
+    private Map<Long, MedicalRecord> medicalRecords = new HashMap<Long, MedicalRecord>();
 
     @GetMapping("/medicalRecord/{id}")
     public ResponseEntity<MedicalRecord> getMedicalRecord(@PathVariable long id) {
@@ -28,6 +29,9 @@ public class mhsController {
 
     @PostMapping("/medicalRecord")
     public ResponseEntity<MedicalRecord> createMedicalRecord(@RequestBody MedicalRecord medicalRecord) {
+        if (!checkPatientExists(medicalRecord.getCF())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
         medicalRecords.put(medicalRecord.getId(), medicalRecord);
         return ResponseEntity.status(HttpStatus.CREATED).body(medicalRecord);
     }
@@ -35,7 +39,9 @@ public class mhsController {
     @PutMapping("/medicalRecord/{id}")
     public ResponseEntity<MedicalRecord> updateMedicalRecord(@PathVariable long id, @RequestBody MedicalRecord medicalRecord) {
         if (medicalRecords.containsKey(id)) {
-            medicalRecord.setId(id);
+            if (!checkPatientExists(medicalRecord.getCF())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
             medicalRecords.put(id, medicalRecord);
             return ResponseEntity.ok(medicalRecord);
         } else {
@@ -44,12 +50,21 @@ public class mhsController {
     }
 
     @DeleteMapping("/medicalRecord/{id}")
-    public ResponseEntity<Void> deleteMedicalRecord(@PathVariable String id) {
+    public ResponseEntity<Void> deleteMedicalRecord(@PathVariable long id) { // Fixed parameter type
         if (medicalRecords.containsKey(id)) {
             medicalRecords.remove(id);
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    private boolean checkPatientExists(String CF) {
+        try {
+            ResponseEntity<String> response = restTemplate.getForEntity(patientServiceUrl + CF, String.class);
+            return response.getStatusCode() == HttpStatus.OK;
+        } catch (Exception e) {
+            return false;
         }
     }
 }
@@ -118,3 +133,5 @@ public class mhsController {
     }
 
 }*/
+
+

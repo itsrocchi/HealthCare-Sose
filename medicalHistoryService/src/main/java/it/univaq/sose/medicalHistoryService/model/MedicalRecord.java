@@ -1,42 +1,35 @@
 package it.univaq.sose.medicalHistoryService.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-
 import java.util.List;
 
-//@Entity
 public class MedicalRecord {
 
-    //@Id
     private Long id;
-    private Patient patient;
+    private String CF; // Changed from Patient to String for CF
     private List<String> pastDiseases;
     private List<Allergies> allergies;
     private List<Vaccinations> vaccinations;
     private List<Medications> medications;
     private String notes;
 
-    // create a static variable idcounter and set it to 0
     private static Long idCounter = 0L;
 
+    // Constructor to automatically set the ID
+    public MedicalRecord() {
+        this.id = idCounter++;
+    }
 
-    //create getters and setters for this class
+    // Getters
     public Long getId() {
         return id;
     }
 
-    public void setId() {
-        this.id = idCounter;
-        idCounter++;
+    public String getCF() {
+        return CF;
     }
 
-    public Patient getPatient() {
-        return patient;
-    }
-
-    public void setPatient(Patient patient) {
-        this.patient = patient;
+    public void setCF(String CF) {
+        this.CF = CF;
     }
 
     public List<String> getPastDiseases() {
@@ -71,7 +64,11 @@ public class MedicalRecord {
         this.medications = medications;
     }
 
+    public String getNotes() {
+        return notes;
+    }
 
-
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
 }
-
