@@ -1,8 +1,10 @@
-/*
 
 package it.univaq.sose.patientRecordService.controller;
 
 import it.univaq.sose.patientRecordService.model.Patient;
+import it.univaq.sose.patientRecordService.service.PrsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,68 +14,45 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/prs")
-public class prsController {
+public class PrsController {
 
     @Autowired
-    private PatientRecordRepository repository;
+    private PrsService service;
 
     @GetMapping("/patientData/{CF}")
     public ResponseEntity<Patient> getPatientData(@PathVariable String CF){
-        Optional<Patient> record = getPatientByCf(CF);
+        Optional<Patient> record = service.getPatientByCf(CF);
         return record.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/patientData")
-    public ResponseEntity<Patient> getAllPatient(){
-        List<Patient> records = getAllPatientRecords();
-        return ResponseEntity.ok((Patient) records);
+    public ResponseEntity<List<Patient>> getAllPatient(){
+        List<Patient> records = service.getAllPatient();
+        return ResponseEntity.ok((List<Patient>) records);
     }
 
     @PostMapping("/patientData")
     public ResponseEntity<Patient> createPatientData(@RequestBody Patient patient) {
-        return ResponseEntity.ok(savePatient(patient));
+        return ResponseEntity.ok(service.savePatient(patient));
     }
 
     @PutMapping("/patientData/{CF}")
     public ResponseEntity<Patient> updatePatientData(@PathVariable String CF, @RequestBody Patient patientRecord) {
-        Patient updatedRecord = updatePatient(CF, patientRecord);
+        Patient updatedRecord = service.updatePatient(CF, patientRecord);
         return updatedRecord != null ? ResponseEntity.ok(updatedRecord) : ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/patientData/{CF}")
     public ResponseEntity<Void> deletePatientData(@PathVariable String CF) {
-        deletePatient(CF);
+        service.deletePatient(CF);
         return ResponseEntity.noContent().build();
     }
 
-    public Optional<Patient> getPatientByCf(String cf) {
-        return repository.findById(cf);
-    }
-
-    public Patient savePatient(Patient patient) {
-        return repository.save(patient);
-    }
-
-    public Patient updatePatient(String cf, Patient patient) {
-        if (repository.existsById(cf)) {
-            patient.setCF(cf);
-            return repository.save(patient);
-        }
-        return null;
-    }
-
-    public void deletePatient(String cf) {
-        repository.deleteById(cf);
-    }
-
-    public List<Patient> getAllPatientRecords() {
-        return repository.findAll();
-    }
-
-} */
 
 
-package it.univaq.sose.patientRecordService.controller;
+}
+
+/*package it.univaq.sose.patientRecordService.controller;
 
 import it.univaq.sose.patientRecordService.model.Patient;
 import org.springframework.http.HttpStatus;
@@ -87,7 +66,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/prs")
-public class prsController {
+public class PrsController {
 
     // Simulazione di un repository in memoria per i dati dei pazienti
     private Map<String, Patient> patientRecords = new HashMap<>();
@@ -139,4 +118,4 @@ public class prsController {
     private List<Patient> getAllPatientRecords() {
         return List.copyOf(patientRecords.values());
     }
-}
+} */

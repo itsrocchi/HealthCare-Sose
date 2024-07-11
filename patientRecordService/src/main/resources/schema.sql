@@ -1,0 +1,9 @@
+CREATE TABLE patients (
+    CF VARCHAR(255) PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    surname VARCHAR(255) NOT NULL,
+    gender VARCHAR(50) NOT NULL,
+    age INT NOT NULL,
+    address VARCHAR(255),
+    email VARCHAR(255) NOT NULL
+);
