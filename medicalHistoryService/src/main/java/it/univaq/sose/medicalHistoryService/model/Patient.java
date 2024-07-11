@@ -1,26 +1,48 @@
 package it.univaq.sose.medicalHistoryService.model;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 
-import java.sql.Date;
+import jakarta.persistence.*;
 
-//@Entity
+import java.util.Date;
+
+@Entity
+@Table(name = "patients")
 public class Patient {
-  //  @Id
+
+    @Id
+    @Column(name = "CF", nullable = false, unique = true)
     private String CF;
 
+    @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "surname", nullable = false)
     private String surname;
-    private Date birthDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "gender", nullable = false)
+    private Gender gender;
+
+    @Column(name = "age", nullable = false)
+    private int age;
+
+    @Column(name = "address")
     private String address;
+
+    @Column(name = "email", nullable = false)
     private String email;
 
-    public Date getBirthDate() {
-        return birthDate;
-    }
+    // Constructors, getters, setters, toString, equals, and hashCode methods
 
-    public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
+    public Patient() {}
+
+    public Patient(String CF, String name, String surname, Gender gender, int age, String address, String email) {
+        this.CF = CF;
+        this.name = name;
+        this.surname = surname;
+        this.gender = gender;
+        this.age = age;
+        this.address = address;
+        this.email = email;
     }
 
     public String getCF() {
@@ -29,14 +51,6 @@ public class Patient {
 
     public void setCF(String CF) {
         this.CF = CF;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getAddress() {
-        return address;
     }
 
     public String getName() {
@@ -55,6 +69,30 @@ public class Patient {
         this.surname = surname;
     }
 
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -63,26 +101,14 @@ public class Patient {
         this.email = email;
     }
 
-    //create constructor for this class
-    public Patient(String name, String surname, String CF, Date birthDate, String address, String email) {
-        this.name = name;
-        this.surname = surname;
-        this.CF = CF;
-        this.birthDate = birthDate;
-        this.address = address;
-        this.email = email;
-    }
-
-    public Patient() {
-    }
-
     @Override
     public String toString() {
         return "Patient{" +
-                "name='" + name + '\'' +
+                "CF='" + CF + '\'' +
+                ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
-                ", CF='" + CF + '\'' +
-                ", birthDate=" + birthDate +
+                ", gender='" + gender + '\'' +
+                ", age=" + age +
                 ", address='" + address + '\'' +
                 ", email='" + email + '\'' +
                 '}';
@@ -91,25 +117,27 @@ public class Patient {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Patient)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
+
         Patient patient = (Patient) o;
-        return getName().equals(patient.getName()) &&
-                getSurname().equals(patient.getSurname()) &&
-                getCF().equals(patient.getCF()) &&
-                getBirthDate().equals(patient.getBirthDate()) &&
-                getAddress().equals(patient.getAddress()) &&
-                getEmail().equals(patient.getEmail());
+
+        if (!CF.equals(patient.CF)) return false;
+        if (!name.equals(patient.name)) return false;
+        if (!surname.equals(patient.surname)) return false;
+        if (gender != patient.gender) return false;
+        if (age != patient.age) return false;
+        if (address != null ? !address.equals(patient.address) : patient.address != null) return false;
+        return email.equals(patient.email);
     }
 
-    // method to create json object for this class
-    public String toJson() {
-        return "{" +
-                "\"name\":\"" + name + '\"' +
-                ", \"surname\":\"" + surname + '\"' +
-                ", \"CF\":\"" + CF + '\"' +
-                ", \"birthDate\":\"" + birthDate + '\"' +
-                ", \"address\":\"" + address + '\"' +
-                ", \"email\":\"" + email + '\"' +
-                '}';
+    @Override
+    public int hashCode() {
+        int result = CF.hashCode();
+        result = 31 * result + name.hashCode();
+        result = 31 * result + surname.hashCode();
+        result = 31 * result + gender.hashCode();
+        result = address != null ? address.hashCode() : 0;
+        result = 31 * result + email.hashCode();
+        return result;
     }
 }
