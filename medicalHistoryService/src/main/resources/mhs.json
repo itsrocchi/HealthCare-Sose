@@ -1,0 +1,207 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "MedicalRecordService API",
+    "description": "API for managing medical records.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "/mhs"
+    }
+  ],
+  "paths": {
+    "/medicalRecord/{id}": {
+      "get": {
+        "summary": "Get medical record by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Medical record ID",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Medical record retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MedicalRecord"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Medical record not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update medical record by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Medical record ID",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated medical record data",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MedicalRecord"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Medical record updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MedicalRecord"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Medical record not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete medical record by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Medical record ID",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Medical record deleted successfully"
+          }
+        }
+      }
+    },
+    "/medicalRecord": {
+      "get": {
+        "summary": "Get a list of all medical records",
+        "responses": {
+          "200": {
+            "description": "List of medical records retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MedicalRecord"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new medical record",
+        "requestBody": {
+          "description": "New medical record data",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MedicalRecord"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Medical record created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MedicalRecord"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "MedicalRecord": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Medical record ID"
+          },
+          "CF": {
+            "type": "string",
+            "description": "Patient's fiscal code"
+          },
+          "pastDiseases": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of past diseases"
+          },
+          "allergies": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of allergies"
+          },
+          "vaccinations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of vaccinations"
+          },
+          "medications": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of medications"
+          },
+          "notes": {
+            "type": "string",
+            "description": "Additional notes"
+          }
+        },
+        "required": [
+          "CF"
+        ]
+      }
+    }
+  }
+}

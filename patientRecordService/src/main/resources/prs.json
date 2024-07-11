@@ -1,0 +1,202 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "PatientRecordService API",
+    "description": "API for managing patient data.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "/prs"
+    }
+  ],
+  "paths": {
+    "/patientData/{CF}": {
+      "get": {
+        "summary": "Get patient data by CF",
+        "parameters": [
+          {
+            "name": "CF",
+            "in": "path",
+            "required": true,
+            "description": "Patient's fiscal code",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Patient data retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Patient"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Patient not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update patient data by CF",
+        "parameters": [
+          {
+            "name": "CF",
+            "in": "path",
+            "required": true,
+            "description": "Patient's fiscal code",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated patient data",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patient"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Patient data updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Patient"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Patient not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete patient data by CF",
+        "parameters": [
+          {
+            "name": "CF",
+            "in": "path",
+            "required": true,
+            "description": "Patient's fiscal code",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Patient deleted successfully"
+          }
+        }
+      }
+    },
+    "/patientData": {
+      "get": {
+        "summary": "Get a list of all patients",
+        "responses": {
+          "200": {
+            "description": "List of patients retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Patient"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new patient",
+        "requestBody": {
+          "description": "New patient data",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patient"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Patient created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Patient"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Gender": {
+        "type": "string",
+        "enum": [
+          "MALE",
+          "FEMALE"
+        ]
+      },
+      "Patient": {
+        "type": "object",
+        "properties": {
+          "CF": {
+            "type": "string",
+            "description": "Fiscal code"
+          },
+          "name": {
+            "type": "string",
+            "description": "Patient's first name"
+          },
+          "surname": {
+            "type": "string",
+            "description": "Patient's last name"
+          },
+          "gender": {
+            "$ref": "#/components/schemas/Gender"
+          },
+          "age": {
+            "type": "integer",
+            "description": "Patient's age"
+          },
+          "address": {
+            "type": "string",
+            "description": "Patient's address"
+          },
+          "email": {
+            "type": "string",
+            "description": "Patient's email"
+          }
+        },
+        "required": [
+          "CF",
+          "name",
+          "surname",
+          "gender",
+          "age",
+          "email"
+        ]
+      }
+    }
+  }
+}
