@@ -19,13 +19,13 @@ public class MedicalRecord {
     private List<String> pastDiseases;
 
     @Column(name = "allergies")
-    private List<Allergies> allergies;
+    private List<String> allergies;
 
     @Column(name = "vaccinations")
-    private List<Vaccinations> vaccinations;
+    private List<String> vaccinations;
 
     @Column(name = "medications")
-    private List<Medications> medications;
+    private List<String> medications;
 
     @Column(name = "notes")
     private String notes;
@@ -58,27 +58,27 @@ public class MedicalRecord {
         this.pastDiseases = pastDiseases;
     }
 
-    public List<Allergies> getAllergies() {
+    public List<String> getAllergies() {
         return allergies;
     }
 
-    public void setAllergies(List<Allergies> allergies) {
+    public void setAllergies(List<String> allergies) {
         this.allergies = allergies;
     }
 
-    public List<Vaccinations> getVaccinations() {
+    public List<String> getVaccinations() {
         return vaccinations;
     }
 
-    public void setVaccinations(List<Vaccinations> vaccinations) {
+    public void setVaccinations(List<String> vaccinations) {
         this.vaccinations = vaccinations;
     }
 
-    public List<Medications> getMedications() {
+    public List<String> getMedications() {
         return medications;
     }
 
-    public void setMedications(List<Medications> medications) {
+    public void setMedications(List<String> medications) {
         this.medications = medications;
     }
 
