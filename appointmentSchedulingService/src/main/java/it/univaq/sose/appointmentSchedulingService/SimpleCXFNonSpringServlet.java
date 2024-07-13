@@ -16,20 +16,22 @@ public class SimpleCXFNonSpringServlet extends CXFNonSpringServlet {
         AccessController.doPrivileged(new PrivilegedAction<Void>() {
             public Void run() {
                 try {
+                    // Load the CXF bus
                     SimpleCXFNonSpringServlet.super.loadBus(servletConfig);
-                    // Create an instance of your service implementation class
                     
+                    // Initialize the database
+                    DatabaseUtil.initializeDatabase();
+                    
+                    // Create an instance of your service implementation class
                     AppointmentServiceImpl service = new AppointmentServiceImpl();
                     
-                    // Publish the endpoint using the instance of your service implementation class
+                    // Publish the endpoint
                     Endpoint.publish("/ass", service);
                 } catch (Exception e) {
-                    // Gestisci eventuali eccezioni qui
+                    // Handle exceptions here
                     e.printStackTrace();
                 }
                 return null;
-
-
             }
         });
     }
