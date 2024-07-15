@@ -21,7 +21,7 @@ public class RestClient {
         return response.getStatus() == 200;
     }
 
-    public boolean doctorExists(Long doctorId) {
+    public boolean doctorExists(String doctorId) {
         Response response = client.target(DOCTOR_RECORD_SERVICE_URL + doctorId).request().get();
         return response.getStatus() == 200;
     }

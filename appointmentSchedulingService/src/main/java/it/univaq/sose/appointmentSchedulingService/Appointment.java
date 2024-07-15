@@ -7,14 +7,14 @@ import jakarta.persistence.*;
 public class Appointment {
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "app_id", nullable = false)
+    private String id;
 	
 	@Column(name = "patient_cf", nullable = false)
     private String patientCF;
     
 	@Column(name = "doctor_Id", nullable = false)
-    private Long doctorId;
+    private String doctorId;
 	
 	@Column(name = "appointment_datetime", nullable = false)
     private String appointmentDateTime;
@@ -24,9 +24,16 @@ public class Appointment {
 	
 	@Column(name="status", nullable = false)
     private String status;
+	
+	public Appointment() {
+		
+	}
+	
+	
+	
 
     
-    public Appointment(Long id, String patientCF, Long doctorId, String appointmentDateTime, String info,
+    public Appointment(String id, String patientCF, String doctorId, String appointmentDateTime, String info,
 			String status) {
 		super();
 		this.id = id;
@@ -37,11 +44,11 @@ public class Appointment {
 		this.status = status;
 	}
 
-	public Long getId() {
+	public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -78,11 +85,11 @@ public class Appointment {
 		this.patientCF = patientCF;
 	}
 
-	public Long getDoctorId() {
+	public String getDoctorId() {
 		return doctorId;
 	}
 
-	public void setDoctorId(Long doctorId) {
+	public void setDoctorId(String doctorId) {
 		this.doctorId = doctorId;
 	}
 }

@@ -8,10 +8,10 @@ import java.util.List;
 public interface AppointmentService {
 
     @WebMethod
-    boolean cancelAppointment(Long appointmentId);
+    boolean cancelAppointment(String appointmentId);
 
     @WebMethod
-    List<String> getAppointmentsByDoctor(Long doctorId);
+    List<String> getAppointmentsByDoctor(String doctorId);
 
     @WebMethod
     List<String> getAppointmentsByPatient(String patientCF);
@@ -20,6 +20,6 @@ public interface AppointmentService {
     boolean updateAppointment(Long appointmentId, String newAppointmentTime);
 
     @WebMethod
-	boolean scheduleAppointment(Long appointmentId, String patientCF, Long doctorId, String appointmentDateTime, String info,
+	boolean scheduleAppointment(String appointmentId, String patientCF, String doctorId, String appointmentDateTime, String info,
 			String status);
 }

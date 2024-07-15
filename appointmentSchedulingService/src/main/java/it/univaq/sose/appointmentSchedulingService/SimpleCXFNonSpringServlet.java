@@ -19,6 +19,9 @@ public class SimpleCXFNonSpringServlet extends CXFNonSpringServlet {
                     // Load the CXF bus
                     SimpleCXFNonSpringServlet.super.loadBus(servletConfig);
                     
+                    H2Console.startH2Console();
+
+                    
                     // Initialize the database
                     DatabaseUtil.initializeDatabase();
                     

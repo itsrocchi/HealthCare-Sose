@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="patientRecordService" />
         <module name="medicalHistoryService" />
+        <module name="doctorRecordService" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -18,6 +19,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="appointmentScheduler" options="-parameters" />
+      <module name="doctorRecordService" options="-parameters" />
       <module name="medicalHistoryService" options="-parameters" />
       <module name="patientRecordService" options="-parameters" />
     </option>
