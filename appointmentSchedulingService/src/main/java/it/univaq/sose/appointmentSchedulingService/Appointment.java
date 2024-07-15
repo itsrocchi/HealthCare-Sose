@@ -1,6 +1,6 @@
 package it.univaq.sose.appointmentSchedulingService;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "appointments")
@@ -91,5 +91,17 @@ public class Appointment {
 
 	public void setDoctorId(String doctorId) {
 		this.doctorId = doctorId;
+	}
+	
+	@Override
+	public String toString() {
+	    return "Appointment{" +
+	            "id='" + id + '\'' +
+	            ", patientCF='" + patientCF + '\'' +
+	            ", doctorId='" + doctorId + '\'' +
+	            ", appointmentDateTime='" + appointmentDateTime + '\'' +
+	            ", info='" + info + '\'' +
+	            ", status='" + status + '\'' +
+	            '}';
 	}
 }
