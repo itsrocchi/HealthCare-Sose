@@ -11,7 +11,6 @@ public class AppInitializer implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         try {
             H2Console.startH2Console();
-            DatabaseUtil.initializeDatabase();
             System.out.println("H2 console and database initialized.");
         } catch (Exception e) {
             e.printStackTrace();

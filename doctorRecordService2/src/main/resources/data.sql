@@ -1,1 +1,0 @@
-INSERT INTO doctors (id, name, surname, specialization) VALUES ('1', 'John', 'Doe', 'Cardiology'), ('2', 'Jane', 'Smith', 'Pediatrics');

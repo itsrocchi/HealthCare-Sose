@@ -1,26 +1,29 @@
 package it.univaq.sose.doctorRecordService.model;
 
+import javax.xml.bind.annotation.XmlRootElement;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Entity
 @Table(name = "doctors")
+@XmlRootElement(name = "Doctor")
 public class Doctor {
 
-    @Id
-    @Column(name = "id", unique = true)
-    private String id; //not a number but a string (like cf)
+	@Id
+	@Column(name = "id", nullable = false)
+    private String id;
 
-    @Column(name = "name", nullable = false)
+    @Column(nullable = false)
     private String name;
 
-    @Column(name = "surname", nullable = false)
+    @Column(nullable = false)
     private String surname;
 
-    @Column(name = "specialization", nullable = false)
+    @Column(nullable = false)
     private String specialization;
 
 
