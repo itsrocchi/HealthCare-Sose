@@ -11,7 +11,8 @@ import javax.xml.ws.Endpoint;
 public class SimpleCXFNonSpringServlet extends CXFNonSpringServlet {
     private static final long serialVersionUID = 1152463856246372604L;
 
-    @Override
+    @SuppressWarnings({ "removal", "deprecation" })
+	@Override
     public void loadBus(final ServletConfig servletConfig) {
         AccessController.doPrivileged(new PrivilegedAction<Void>() {
             public Void run() {
