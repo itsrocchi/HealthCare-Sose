@@ -17,9 +17,14 @@ public interface AppointmentService {
     List<String> getAppointmentsByPatient(String patientCF);
 
     @WebMethod
-    boolean updateAppointment(Long appointmentId, String newAppointmentTime);
-
-    @WebMethod
 	boolean scheduleAppointment(String appointmentId, String patientCF, String doctorId, String appointmentDateTime, String info,
 			String status);
+
+	List<String> getAppointmentById(String appointmentId);
+
+	@WebMethod
+	boolean updateAppointment(String appointmentId, String newAppointmentTime);
+
+	List<String> getAllAppointments();
 }
+
