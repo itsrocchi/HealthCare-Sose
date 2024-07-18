@@ -5,7 +5,6 @@ import it.univaq.sose.medicalHistoryService.repository.MedicalRecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,9 +13,6 @@ import java.util.Optional;
 public class MhsService {
 
     private final String PRS_BASE_URL = "http://localhost:8080/prs";
-
-    @Autowired
-    private RestTemplate restTemplate;
 
     @Autowired
     private MedicalRecordRepository medicalRecordRepository;
@@ -30,25 +26,14 @@ public class MhsService {
     }
 
     public ResponseEntity<MedicalRecord> createMedicalRecord(MedicalRecord medicalRecord) {
-        ResponseEntity<Void> response = restTemplate.getForEntity(PRS_BASE_URL + "/patientData/{CF}", Void.class, medicalRecord.getCF());
-        if (response.getStatusCode().is2xxSuccessful()) {
-            return ResponseEntity.ok(medicalRecordRepository.save(medicalRecord));
-        } else {
-            return ResponseEntity.status(400).body(null);
-        }
+        return ResponseEntity.ok(medicalRecordRepository.save(medicalRecord));
     }
 
     public ResponseEntity<MedicalRecord> updateMedicalRecord(Long id, MedicalRecord medicalRecord) {
         if (!medicalRecordRepository.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
-
-        ResponseEntity<Void> response = restTemplate.getForEntity(PRS_BASE_URL + "/patientData/{CF}", Void.class, medicalRecord.getCF());
-        if (response.getStatusCode().is2xxSuccessful()) {
-            return ResponseEntity.ok(medicalRecordRepository.save(medicalRecord));
-        } else {
-            return ResponseEntity.status(400).body(null);
-        }
+        return ResponseEntity.ok(medicalRecordRepository.save(medicalRecord));
     }
 
     public ResponseEntity<Void> deleteMedicalRecord(Long id) {
