@@ -1,7 +1,6 @@
 package it.univaq.sose.medicalHistoryService.model;
 
 import jakarta.persistence.*;
-
 import java.util.List;
 
 @Entity
@@ -9,11 +8,8 @@ import java.util.List;
 public class MedicalRecord {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(name = "CF", nullable = false)
-    private String CF; // Changed from Patient to String for CF
+    private String CF; // Changed to be the primary key
 
     @Column(name = "diseases")
     private List<String> pastDiseases;
@@ -21,8 +17,10 @@ public class MedicalRecord {
     @Column(name = "allergies")
     private List<String> allergies;
 
+
     @Column(name = "vaccinations")
     private List<String> vaccinations;
+
 
     @Column(name = "medications")
     private List<String> medications;
@@ -30,17 +28,9 @@ public class MedicalRecord {
     @Column(name = "notes")
     private String notes;
 
-    private static Long idCounter = 0L;
+    // Constructors, getters, setters, toString, equals, and hashCode methods
 
-// Constructors, getters, setters, toString, equals, and hashCode methods
-
-    public MedicalRecord() {
-        this.id = ++idCounter;
-    }
-
-    public Long getId() {
-        return id;
-    }
+    public MedicalRecord() {}
 
     public String getCF() {
         return CF;
@@ -93,42 +83,25 @@ public class MedicalRecord {
     @Override
     public String toString() {
         return "MedicalRecord{" +
-                "id=" + id +
-                ", CF='" + CF +
+                "CF='" + CF + '\'' +
                 ", pastDiseases=" + pastDiseases +
                 ", allergies=" + allergies +
                 ", vaccinations=" + vaccinations +
                 ", medications=" + medications +
-                ", notes='" + notes +
-        '}';
+                ", notes='" + notes + '\'' +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         MedicalRecord that = (MedicalRecord) o;
-
-        if (!id.equals(that.id)) return false;
-        if (!CF.equals(that.CF)) return false;
-        if (!pastDiseases.equals(that.pastDiseases)) return false;
-        if (!allergies.equals(that.allergies)) return false;
-        if (!vaccinations.equals(that.vaccinations)) return false;
-        if (!medications.equals(that.medications)) return false;
-        return notes != null ? notes.equals(that.notes) : that.notes == null;
+        return CF.equals(that.CF);
     }
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + CF.hashCode();
-        result = 31 * result + pastDiseases.hashCode();
-        result = 31 * result + allergies.hashCode();
-        result = 31 * result + vaccinations.hashCode();
-        result = 31 * result + medications.hashCode();
-        result = notes != null ? notes.hashCode() : 0;
-        return result;
+        return CF.hashCode();
     }
-
 }

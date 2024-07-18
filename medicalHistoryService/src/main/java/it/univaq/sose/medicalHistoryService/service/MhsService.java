@@ -5,20 +5,17 @@ import it.univaq.sose.medicalHistoryService.repository.MedicalRecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class MhsService {
 
-    private final String PRS_BASE_URL = "http://localhost:8080/prs";
-
     @Autowired
     private MedicalRecordRepository medicalRecordRepository;
 
-    public Optional<MedicalRecord> getMedicalRecord(Long id) {
-        return medicalRecordRepository.findById(id);
+    public Optional<MedicalRecord> getMedicalRecord(String cf) {
+        return medicalRecordRepository.findByCF(cf);
     }
 
     public List<MedicalRecord> getAllMedicalRecords() {
@@ -29,18 +26,19 @@ public class MhsService {
         return ResponseEntity.ok(medicalRecordRepository.save(medicalRecord));
     }
 
-    public ResponseEntity<MedicalRecord> updateMedicalRecord(Long id, MedicalRecord medicalRecord) {
-        if (!medicalRecordRepository.existsById(id)) {
+    public ResponseEntity<MedicalRecord> updateMedicalRecord(String cf, MedicalRecord medicalRecord) {
+        if (!medicalRecordRepository.existsByCF(cf)) {
             return ResponseEntity.notFound().build();
         }
+        medicalRecord.setCF(cf);
         return ResponseEntity.ok(medicalRecordRepository.save(medicalRecord));
     }
 
-    public ResponseEntity<Void> deleteMedicalRecord(Long id) {
-        if (!medicalRecordRepository.existsById(id)) {
+    public ResponseEntity<Void> deleteMedicalRecord(String cf) {
+        if (!medicalRecordRepository.existsByCF(cf)) {
             return ResponseEntity.notFound().build();
         }
-        medicalRecordRepository.deleteById(id);
+        medicalRecordRepository.deleteByCF(cf);
         return ResponseEntity.noContent().build();
     }
 }

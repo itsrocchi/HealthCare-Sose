@@ -16,9 +16,9 @@ public class MhsController {
     @Autowired
     private MhsService service;
 
-    @GetMapping("/medicalRecord/{id}")
-    public ResponseEntity<MedicalRecord> getMedicalRecord(@PathVariable Long id) {
-        Optional<MedicalRecord> record = service.getMedicalRecord(id);
+    @GetMapping("/medicalRecord/{cf}")
+    public ResponseEntity<MedicalRecord> getMedicalRecord(@PathVariable String cf) {
+        Optional<MedicalRecord> record = service.getMedicalRecord(cf);
         return record.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
@@ -33,13 +33,13 @@ public class MhsController {
         return service.createMedicalRecord(medicalRecord);
     }
 
-    @PutMapping("/medicalRecord/{id}")
-    public ResponseEntity<MedicalRecord> updateMedicalRecord(@PathVariable Long id, @RequestBody MedicalRecord medicalRecord) {
-        return service.updateMedicalRecord(id, medicalRecord);
+    @PutMapping("/medicalRecord/{cf}")
+    public ResponseEntity<MedicalRecord> updateMedicalRecord(@PathVariable String cf, @RequestBody MedicalRecord medicalRecord) {
+        return service.updateMedicalRecord(cf, medicalRecord);
     }
 
-    @DeleteMapping("/medicalRecord/{id}")
-    public ResponseEntity<Void> deleteMedicalRecord(@PathVariable Long id) {
-        return service.deleteMedicalRecord(id);
+    @DeleteMapping("/medicalRecord/{cf}")
+    public ResponseEntity<Void> deleteMedicalRecord(@PathVariable String cf) {
+        return service.deleteMedicalRecord(cf);
     }
 }
