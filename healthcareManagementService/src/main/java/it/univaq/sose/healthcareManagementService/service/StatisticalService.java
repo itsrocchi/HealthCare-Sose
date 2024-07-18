@@ -1,13 +1,16 @@
 package it.univaq.sose.healthcareManagementService.service;
 
+import it.univaq.sose.medicalHistoryService.model.MedicalRecord;
+import it.univaq.sose.patientRecordService.model.Gender;
 import it.univaq.sose.patientRecordService.model.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.ws.client.core.WebServiceTemplate;
+//import org.springframework.ws.client.core.WebServiceTemplate;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class StatisticalService {
@@ -15,13 +18,19 @@ public class StatisticalService {
     @Autowired
     private RestTemplate restTemplate;
 
-    @Autowired
-    private WebServiceTemplate soapTemplate;
+    //@Autowired
+    //private WebServiceTemplate soapTemplate;
 
     public List<Patient> getAllPatients() {
         String url = "http://localhost:8080/prs/patientData";
         Patient[] patients = restTemplate.getForObject(url, Patient[].class);
         return Arrays.asList(patients);
+    }
+
+    public List<MedicalRecord> getAllMedicalRecords() {
+        String url = "http://localhost:8081/mhs/medicalRecord";
+        MedicalRecord[] medicalRecords = restTemplate.getForObject(url, MedicalRecord[].class);
+        return Arrays.asList(medicalRecords);
     }
 
     public double calculateAverageAge() {
@@ -35,6 +44,40 @@ public class StatisticalService {
     public long countTotalPatients() {
         List<Patient> patients = getAllPatients();
         return patients.size();
+    }
+
+    public Map<String, Double> calculateGenderPercentage() {
+        List<Patient> patients = getAllPatients();
+        long totalPatients = patients.size();
+        if (totalPatients == 0) {
+            return Map.of("MALE", 0.0, "FEMALE", 0.0);
+        }
+
+        long maleCount = patients.stream()
+                .filter(patient -> Gender.MALE.equals(patient.getGender()))
+                .count();
+        long femaleCount = patients.stream()
+                .filter(patient -> Gender.FEMALE.equals(patient.getGender()))
+                .count();
+
+        double malePercentage = (double) maleCount / totalPatients * 100;
+        double femalePercentage = (double) femaleCount / totalPatients * 100;
+
+        return Map.of("MALE", malePercentage, "FEMALE", femalePercentage);
+    }
+
+    public double calculateDiseaseFreePercentage() {
+        List<MedicalRecord> medicalRecords = getAllMedicalRecords();
+        long totalPatients = medicalRecords.size();
+        if (totalPatients == 0) {
+            return 0.0;
+        }
+
+        long diseaseFreeCount = medicalRecords.stream()
+                .filter(medicalRecord -> medicalRecord.getPastDiseases() == null || medicalRecord.getPastDiseases().isEmpty())
+                .count();
+
+        return (double) diseaseFreeCount / totalPatients * 100;
     }
 
     /*@Autowired

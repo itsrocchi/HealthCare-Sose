@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/hms/statistical")
 public class StatisticalController {
@@ -24,6 +26,18 @@ public class StatisticalController {
     public ResponseEntity<Long> getTotalPatients() {
         long totalPatients = service.countTotalPatients();
         return ResponseEntity.ok(totalPatients);
+    }
+
+    @GetMapping("/gender-percentage")
+    public ResponseEntity<Map<String, Double>> getGenderPercentage() {
+        Map<String, Double> genderPercentage = service.calculateGenderPercentage();
+        return ResponseEntity.ok(genderPercentage);
+    }
+
+    @GetMapping("/nodisease-percentage")
+    public ResponseEntity<Double> getDiseaseFreePercentage() {
+        double diseaseFreePercentage = service.calculateDiseaseFreePercentage();
+        return ResponseEntity.ok(diseaseFreePercentage);
     }
 
     /*@GetMapping("/{doctorCF}")
