@@ -10,14 +10,10 @@ spring:
           predicates:
             - Path=/prs/**
           filters:
-            - RewritePath=/prs(?<segment>/?.*), /prs/patientData$\\{segment}
+            - RewritePath=/prs/(?<segment>.*), /prs/patientData$\\{segment}
         - id: doctor-service
           uri: http://localhost:8083
           predicates:
             - Path=/drs/**
           filters:
-            - RewritePath=/drs(?<segment>/?.*), /drs/doctorData$\\{segment}
-
-logging:
-  level:
-    org.springframework.cloud.gateway: DEBUG
+            - RewritePath=/drs/(?<segment>.*), /doctorRecordService/rest/drs/doctorData$\\{segment}
