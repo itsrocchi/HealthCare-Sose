@@ -1,20 +1,24 @@
 package it.univaq.sose.healthcareManagementService.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.concurrent.CompletableFuture;
+
 @RestController
 @RequestMapping("/hms/aggregatedData")
+@EnableAsync
 public class AggregateController {
 
     @Autowired
@@ -23,50 +27,46 @@ public class AggregateController {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Async
+    public CompletableFuture<ResponseEntity<String>> getPatientData(String cf) {
+        String url = "http://localhost:8080/prs/patientData/" + cf;
+        return CompletableFuture.supplyAsync(() -> restTemplate.getForEntity(url, String.class));
+    }
+
+    @Async
+    public CompletableFuture<ResponseEntity<String>> getMedicalRecord(String cf) {
+        String url = "http://localhost:8081/mhs/medicalRecord/" + cf;
+        return CompletableFuture.supplyAsync(() -> restTemplate.getForEntity(url, String.class));
+    }
+
     @GetMapping("/{cf}")
-    public ResponseEntity<String> aggregatePatientData(@PathVariable String cf) {
-        try {
-            // Get patient data from Patient Record Service
-            String getPatientDataUrl = "http://localhost:8080/prs/patientData/" + cf;
-            ResponseEntity<String> getResponse = restTemplate.getForEntity(getPatientDataUrl, String.class);
+    public CompletableFuture<ResponseEntity<String>> aggregatePatientData(@PathVariable String cf) {
+        CompletableFuture<ResponseEntity<String>> patientDataFuture = getPatientData(cf);
+        CompletableFuture<ResponseEntity<String>> medicalRecordDataFuture = getMedicalRecord(cf);
 
-            // Get medical record data from Medical History Service
-            String checkMedicalRecordUrl = "http://localhost:8081/mhs/medicalRecord/" + cf;
-            ResponseEntity<String> checkResponse = restTemplate.getForEntity(checkMedicalRecordUrl, String.class);
+        return patientDataFuture.thenCombine(medicalRecordDataFuture, (patientResponse, medicalResponse) -> {
+            if (patientResponse.getStatusCode() == HttpStatus.OK && medicalResponse.getStatusCode() == HttpStatus.OK) {
+                try {
+                    JsonNode patientDataNode = objectMapper.readTree(patientResponse.getBody());
+                    JsonNode medicalRecordDataNode = objectMapper.readTree(medicalResponse.getBody());
 
-            // Check if both responses are successful
-            if (getResponse.getStatusCode() == HttpStatus.OK && checkResponse.getStatusCode() == HttpStatus.OK) {
-                // Parse the responses into JsonNode objects
-                // Parse the responses into JsonNode objects
-                JsonNode patientDataNode = objectMapper.readTree(getResponse.getBody());
-                JsonNode medicalRecordDataNode = objectMapper.readTree(checkResponse.getBody());
+                    ((ObjectNode) patientDataNode).remove("cf");
+                    ((ObjectNode) medicalRecordDataNode).remove("cf");
 
-                // Remove the 'cf' field from patientData and medicalRecordData
-                ((ObjectNode) patientDataNode).remove("cf");
-                ((ObjectNode) medicalRecordDataNode).remove("cf");
+                    ObjectNode mergedResponseNode = objectMapper.createObjectNode();
+                    mergedResponseNode.put("cf", cf);
+                    mergedResponseNode.set("patientData", patientDataNode);
+                    mergedResponseNode.set("medicalRecordData", medicalRecordDataNode);
 
-                // Create a new JSON object and add the parsed responses
-                ObjectNode mergedResponseNode = objectMapper.createObjectNode();
-                mergedResponseNode.put("cf", cf);
-                mergedResponseNode.set("patientData", patientDataNode);
-                mergedResponseNode.set("medicalRecordData", medicalRecordDataNode);
+                    String mergedResponse = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(mergedResponseNode);
 
-                // Convert the merged JSON object to a pretty-printed string
-                String mergedResponse = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(mergedResponseNode);
-
-                // Return the aggregated data
-                return new ResponseEntity<>(mergedResponse, HttpStatus.OK);
+                    return new ResponseEntity<>(mergedResponse, HttpStatus.OK);
+                } catch (Exception e) {
+                    return new ResponseEntity<>("An error occurred while processing the data", HttpStatus.INTERNAL_SERVER_ERROR);
+                }
             } else {
-                // Handle cases where one or both services failed
                 return new ResponseEntity<>("Failed to fetch data from one or both services", HttpStatus.INTERNAL_SERVER_ERROR);
             }
-        } catch (JsonProcessingException e) {
-            // Handle JSON processing exceptions
-            return new ResponseEntity<>("An error occurred while processing the data", HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (Exception e) {
-            // Handle other exceptions
-            return new ResponseEntity<>("An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
+        });
     }
 }
