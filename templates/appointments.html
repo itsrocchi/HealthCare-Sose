@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Appointments</title>
+    <style>
+        .response {
+            white-space: pre-wrap;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h1>Appointment Operations</h1>
+    <!-- Form for SOAP cancelAppointment -->
+    <h3>Cancel Appointment</h3>
+    <input type="text" id="cancel-appointment-arg0" placeholder="Enter Appointment ID">
+    <button onclick="soapCancelAppointment()">Cancel Appointment</button>
+    <div id="soap-cancel-appointment-response" class="response"></div>
+
+    <!-- Form for SOAP getAllAppointments -->
+    <h3>Get All Appointments</h3>
+    <button onclick="sendRequest('soap/getAllAppointments','POST')">Get All Appointments</button>
+    <div id="soap-get-all-appointments-response" class="response"></div>
+
+    <!-- Form for SOAP getAppointmentById -->
+    <h3>Get Appointment By ID</h3>
+    <input type="text" id="get-appointment-by-id-arg0" placeholder="Enter Appointment ID">
+    <button onclick="soapGetAppointmentById()">Get Appointment</button>
+    <div id="soap-get-appointment-by-id-response" class="response"></div>
+
+    <!-- Form for SOAP getAppointmentsByDoctor -->
+    <h3>Get Appointments By Doctor</h3>
+    <input type="text" id="get-appointments-by-doctor-arg0" placeholder="Enter Doctor ID">
+    <button onclick="soapGetAppointmentsByDoctor()">Get Appointments</button>
+    <div id="soap-get-appointments-by-doctor-response" class="response"></div>
+
+    <!-- Form for SOAP getAppointmentsByPatient -->
+    <h3>Get Appointments By Patient</h3>
+    <input type="text" id="get-appointments-by-patient-arg0" placeholder="Enter Patient ID">
+    <button onclick="soapGetAppointmentsByPatient()">Get Appointments</button>
+    <div id="soap-get-appointments-by-patient-response" class="response"></div>
+
+    <!-- Form for SOAP scheduleAppointment -->
+    <h3>Schedule Appointment</h3>
+    <input type="text" id="schedule-appointment-arg0" placeholder="Enter Appointment ID"><br>
+    <input type="text" id="schedule-appointment-arg1" placeholder="Enter Patient ID"><br>
+    <input type="text" id="schedule-appointment-arg2" placeholder="Enter Doctor ID"><br>
+    <input type="text" id="schedule-appointment-arg3" placeholder="Enter Date"><br>
+    <input type="text" id="schedule-appointment-arg4" placeholder="Enter Reason"><br>
+    <input type="text" id="schedule-appointment-arg5" placeholder="Enter Status"><br>
+    <button onclick="soapScheduleAppointment()">Schedule Appointment</button>
+    <div id="soap-schedule-appointment-response" class="response"></div>
+
+    <!-- Form for SOAP updateAppointment -->
+    <h3>Update Appointment</h3>
+    <input type="text" id="update-appointment-arg0" placeholder="Enter Appointment ID"><br>
+    <input type="text" id="update-appointment-arg1" placeholder="Enter Updated Data"><br>
+    <button onclick="soapUpdateAppointment()">Update Appointment</button>
+    <div id="soap-update-appointment-response" class="response"></div>
+<a href="/">Back to Home</a>
+
+    <!-- Include scripts here -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        async function soapCancelAppointment() {
+            const arg0 = document.getElementById('cancel-appointment-arg0').value.trim();
+            const data = { arg0 };
+
+            try {
+                const response = await fetch(`/soap/cancelAppointment`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                document.getElementById('soap-cancel-appointment-response').textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                document.getElementById('soap-cancel-appointment-response').textContent = `Error: ${error.message}`;
+            }
+        }
+
+        function sendRequest(endpoint, method) {
+            let url = `/${endpoint}`;
+            let options = {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+            if (method === 'POST') {
+                options.body = JSON.stringify({
+                    "cf": "ABC126",
+                    "name": "John",
+                    "surname": "Doe",
+                    "gender": "MALE",
+                    "birthDate": "1990-01-01",
+                    "address": "123 Main St",
+                    "email": "john.doe@example.com"
+                });
+            }
+            fetch(url, options)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('soap-get-all-appointments-response').innerText = JSON.stringify(data, null, 2);
+                })
+                .catch(error => {
+                    document.getElementById('soap-get-all-appointments-response').innerText = 'Error: ' + error;
+                });
+        }
+
+        async function soapGetAppointmentById() {
+            const arg0 = document.getElementById('get-appointment-by-id-arg0').value.trim();
+            const data = { arg0 };
+
+            try {
+                const response = await fetch(`/soap/getAppointmentById`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                document.getElementById('soap-get-appointment-by-id-response').textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                document.getElementById('soap-get-appointment-by-id-response').textContent = `Error: ${error.message}`;
+            }
+        }
+
+        async function soapGetAppointmentsByDoctor() {
+            const arg0 = document.getElementById('get-appointments-by-doctor-arg0').value.trim();
+            const data = { arg0 };
+
+            try {
+                const response = await fetch(`/soap/getAppointmentsByDoctor`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                document.getElementById('soap-get-appointments-by-doctor-response').textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                document.getElementById('soap-get-appointments-by-doctor-response').textContent = `Error: ${error.message}`;
+            }
+        }
+
+        async function soapGetAppointmentsByPatient() {
+            const arg0 = document.getElementById('get-appointments-by-patient-arg0').value.trim();
+            const data = { arg0 };
+
+            try {
+                const response = await fetch(`/soap/getAppointmentsByPatient`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                document.getElementById('soap-get-appointments-by-patient-response').textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                document.getElementById('soap-get-appointments-by-patient-response').textContent = `Error: ${error.message}`;
+            }
+        }
+
+        async function soapScheduleAppointment() {
+            const arg0 = document.getElementById('schedule-appointment-arg0').value.trim();
+            const arg1 = document.getElementById('schedule-appointment-arg1').value.trim();
+            const arg2 = document.getElementById('schedule-appointment-arg2').value.trim();
+            const arg3 = document.getElementById('schedule-appointment-arg3').value.trim();
+            const arg4 = document.getElementById('schedule-appointment-arg4').value.trim();
+            const arg5 = document.getElementById('schedule-appointment-arg5').value.trim();
+            const data = { arg0, arg1, arg2, arg3, arg4, arg5 };
+
+            try {
+                const response = await fetch(`/soap/scheduleAppointment`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                document.getElementById('soap-schedule-appointment-response').textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                document.getElementById('soap-schedule-appointment-response').textContent = `Error: ${error.message}`;
+            }
+        }
+
+        async function soapUpdateAppointment() {
+            const arg0 = document.getElementById('update-appointment-arg0').value.trim();
+            const arg1 = document.getElementById('update-appointment-arg1').value.trim();
+            const data = { arg0, arg1 };
+
+            try {
+                const response = await fetch(`/soap/updateAppointment`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                document.getElementById('soap-update-appointment-response').textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                document.getElementById('soap-update-appointment-response').textContent = `Error: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>

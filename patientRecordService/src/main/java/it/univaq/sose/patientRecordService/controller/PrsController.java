@@ -3,14 +3,12 @@ package it.univaq.sose.patientRecordService.controller;
 
 import it.univaq.sose.patientRecordService.model.Patient;
 import it.univaq.sose.patientRecordService.service.PrsService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/prs")
@@ -43,11 +41,13 @@ public class PrsController {
     }
 
     @DeleteMapping("/patientData/{CF}")
-    public ResponseEntity<Void> deletePatientData(@PathVariable String CF) {
+    public ResponseEntity<?> deletePatientData(@PathVariable String CF) {
+        if (!service.existsByCf(CF)) {
+            return ResponseEntity.notFound().build();
+        }
         service.deletePatient(CF);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
-
-
+    
 
 }

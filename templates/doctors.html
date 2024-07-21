@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Doctors</title>
+    <style>
+        .response {
+            white-space: pre-wrap;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h1>Doctor Operations</h1>
+     <!-- Form for GET /drs -->
+     <h3>Get DRS Data</h3>
+     <button onclick="getDrsData()">Get DRS Data</button>
+     <div id="get-drs-response" class="response"></div>
+ 
+     <!-- Form for GET /drs/{id} -->
+     <h3>Get DRS Data by ID</h3>
+     <input type="text" id="drs-get-cf" placeholder="Enter CF">
+     <button onclick="getDrsById()">Get DRS Data</button>
+     <pre id="get-drs-response2" class="response"></pre>
+ 
+     <!-- Form for POST /drs -->
+     <h3>Post DRS Data</h3>
+     <textarea id="drs-post-body" placeholder='{"id": "D99", "name": "Eric", "surname": "Mheinen", "specialization": "Psychiatry"}' rows="5" cols="60"></textarea><br>
+     <button onclick="postDrsData()">Post DRS Data</button>
+     <div id="post-drs-response" class="response"></div>
+ 
+     <!-- Form for PUT /drs/{ID} -->
+     <h3>Put DRS Data</h3>
+     <input type="text" id="drs-put-id" placeholder="Enter ID"><br>
+     <textarea id="drs-put-body" placeholder='{"name": "Eric", "surname": "Mheinen", "specialization": "Psychiatry"}' rows="5" cols="60"></textarea><br>
+     <button onclick="putDrsData()">Put DRS Data</button>
+     <div id="put-drs-response" class="response"></div>
+ 
+     <!-- Form for DELETE /drs/{ID} -->
+     <h3>Delete DRS Data</h3>
+     <input type="text" id="drs-delete-id" placeholder="Enter ID">
+     <button onclick="deleteDrsData()">Delete DRS Data</button>
+     <div id="delete-drs-response" class="response"></div><a href="/">Back to Home</a>
+
+    <!-- Include scripts here -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        async function getDrsData() {
+            try {
+                const response = await fetch('/drs');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                document.getElementById('get-drs-response').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('get-drs-response').textContent = `Error: ${error.message}`;
+            }
+        }
+
+        async function postDrsData() {
+            const body = document.getElementById('drs-post-body').value.trim();
+            try {
+                const response = await fetch('/drs', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: body
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                document.getElementById('post-drs-response').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('post-drs-response').textContent = `Error: ${error.message}`;
+            }
+        }
+
+        async function putDrsData() {
+            const id = document.getElementById('drs-put-id').value.trim();
+            const body = document.getElementById('drs-put-body').value.trim();
+            if (!id) {
+                document.getElementById('put-drs-response').textContent = 'Error: ID is required';
+                return;
+            }
+
+            try {
+                const response = await fetch(`/drs/${encodeURIComponent(id)}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: body
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                document.getElementById('put-drs-response').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('put-drs-response').textContent = `Error: ${error.message}`;
+            }
+        }
+
+        async function deleteDrsData() {
+            const id = document.getElementById('drs-delete-id').value.trim();
+            if (!id) {
+                document.getElementById('delete-drs-response').textContent = 'Error: ID is required';
+                return;
+            }
+
+            try {
+                const response = await fetch(`/drs/${encodeURIComponent(id)}`, {
+                    method: 'DELETE'
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }if(response.status_code == 500) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }else{
+                    document.getElementById('delete-drs-response').textContent = 'Delete successful';
+                }
+            } catch (error) {
+                document.getElementById('delete-drs-response').textContent = `Error: ${error.message}`;
+            }
+        }
+
+        async function getDrsById() {
+            const cf = document.getElementById('drs-get-cf').value.trim();
+            if (!cf) {
+                document.getElementById('get-drs-response2').textContent = 'Error: CF is required';
+                return;
+            }
+
+            try {
+                const response = await fetch(`/drs/${encodeURIComponent(cf)}`);
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+                }
+                const data = await response.json();
+                document.getElementById('get-drs-response2').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('get-drs-response2').textContent = `Error: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>

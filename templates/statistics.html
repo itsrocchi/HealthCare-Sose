@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Statistics</title>
+    <style>
+        .response {
+            white-space: pre-wrap;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h1>Statistical Operations</h1>
+    <!-- Form for GET /hms/statistical/... -->
+    <h3>Get HMS Statistical Data</h3>
+    <button onclick="getHmsAverageAge()">Get Average Age</button>
+    <button onclick="getHmsTotalPatient()">Get Total Patients</button>
+    <button onclick="getHmsGenderPercentage()">Get Gender Percentage</button>
+    <button onclick="getHmsNoDiseasePercentage()">Get No Disease Percentage</button>
+    <div id="hms-statistical-response" class="response"></div>
+    <a href="/">Back to Home</a>
+
+    <!-- Include scripts here -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        
+        async function getHmsAverageAge() {
+            try {
+                const response = await fetch('/hms/statistical/average-age');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                document.getElementById('hms-statistical-response').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('hms-statistical-response').textContent = `Error: ${error.message}`;
+            }
+        }
+        
+
+        async function getHmsTotalPatient() {
+            try {
+                const response = await fetch('/hms/statistical/total-patients');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                document.getElementById('hms-statistical-response').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('hms-statistical-response').textContent = `Error: ${error.message}`;
+            }
+        }
+
+        async function getHmsGenderPercentage() {
+            try {
+                const response = await fetch('/hms/statistical/gender-percentage');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                document.getElementById('hms-statistical-response').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('hms-statistical-response').textContent = `Error: ${error.message}`;
+            }
+        }
+
+        async function getHmsNoDiseasePercentage() {
+            try {
+                const response = await fetch('/hms/statistical/nodisease-percentage');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                document.getElementById('hms-statistical-response').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('hms-statistical-response').textContent = `Error: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -6,7 +6,6 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="client" />
         <module name="healthcareManagementService" />
         <module name="discoveryServer" />
         <module name="patientRecordService" />
@@ -17,6 +16,7 @@
     <bytecodeTargetLevel>
       <module name="appointmentScheduler" target="17" />
       <module name="appointmentSchedulingService" target="1.8" />
+      <module name="client" target="17" />
       <module name="doctorRecordService" target="17" />
     </bytecodeTargetLevel>
   </component>

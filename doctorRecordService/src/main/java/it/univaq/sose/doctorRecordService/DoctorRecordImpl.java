@@ -61,7 +61,7 @@ public class DoctorRecordImpl implements DoctorRecord {
             em.getTransaction().begin();
             em.remove(doctor);
             em.getTransaction().commit();
-            return Response.noContent().build();
+            return Response.ok().build();
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
         }

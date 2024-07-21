@@ -47,6 +47,10 @@ public class PrsService {
         repository.deleteById(cf);
     }
 
+    public boolean existsByCf(String cf) {
+        return repository.existsById(cf);
+    }
+
     public List<Patient> getAllPatient() {
         return repository.findAll();
     }

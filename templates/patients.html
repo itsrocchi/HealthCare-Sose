@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Patients</title>
+    <style>
+        .response {
+            white-space: pre-wrap;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h1>Patient Operations</h1>
+    <!-- Form for GET /prs -->
+    <h3>Get PRS Data</h3>
+    <button onclick="getPrsData()">Get PRS Data</button>
+    <div id="get-prs-response" class="response"></div>
+
+    <!-- Form for GET /prs/{CF} -->
+    <h3>Get PRS Data by CF</h3>
+    <input type="text" id="prs-get-cf" placeholder="Enter CF">
+    <button onclick="getPrsById()">Get PRS Data</button>
+    <pre id="get-prs-response2" class="response"></pre>
+
+    <!-- Form for POST /prs -->
+    <h3>Post PRS Data</h3>
+    <textarea id="prs-post-body" placeholder='{"cf": "ABC126", "name": "John", "surname": "Doe", "gender": "MALE", "birthDate": "1990-01-01", "address": "123 Main St", "email": "john.doe@example.com"}' rows="5" cols="60"></textarea><br>
+    <button onclick="postPrsData()">Post PRS Data</button>
+    <div id="post-prs-response" class="response"></div>
+
+    <!-- Form for PUT /prs/{CF} -->
+    <h3>Put PRS Data</h3>
+    <input type="text" id="prs-put-cf" placeholder="Enter CF"><br>
+    <textarea id="prs-put-body" placeholder='{"name": "John", "surname": "Doe", "gender": "MALE", "birthDate": "1990-01-01", "address": "123 Main St", "email": "john.doe@example.com"}' rows="5" cols="60"></textarea><br>
+    <button onclick="putPrsData()">Put PRS Data</button>
+    <div id="put-prs-response" class="response"></div>
+
+    <!-- Form for DELETE /prs/{CF} -->
+    <h3>Delete PRS Data</h3>
+    <input type="text" id="prs-delete-cf" placeholder="Enter CF">
+    <button onclick="deletePrsData()">Delete PRS Data</button>
+    <div id="delete-prs-response" class="response"></div><a href="/">Back to Home</a>
+
+    <!-- Include scripts here -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        async function getPrsById() {
+            const cf = document.getElementById('prs-get-cf').value.trim();
+            if (!cf) {
+                document.getElementById('get-prs-response2').textContent = 'Error: CF is required';
+                return;
+            }
+
+            try {
+                const response = await fetch(`/prs/${encodeURIComponent(cf)}`);
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+                }
+                const data = await response.json();
+                document.getElementById('get-prs-response2').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('get-prs-response2').textContent = `Error: ${error.message}`;
+            }
+        }
+
+        async function getPrsData() {
+            try {
+                const response = await fetch('/prs');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                document.getElementById('get-prs-response').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('get-prs-response').textContent = `Error: ${error.message}`;
+            }
+        }
+
+        async function postPrsData() {
+            const body = document.getElementById('prs-post-body').value.trim();
+            try {
+                const response = await fetch('/prs', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: body
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                document.getElementById('post-prs-response').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('post-prs-response').textContent = `Error: ${error.message}`;
+            }
+        }
+
+        async function putPrsData() {
+            const cf = document.getElementById('prs-put-cf').value.trim();
+            const body = document.getElementById('prs-put-body').value.trim();
+            if (!cf) {
+                document.getElementById('put-prs-response').textContent = 'Error: CF is required';
+                return;
+            }
+
+            try {
+                const response = await fetch(`/prs/${encodeURIComponent(cf)}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: body
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                document.getElementById('put-prs-response').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('put-prs-response').textContent = `Error: ${error.message}`;
+            }
+        }
+
+        async function deletePrsData() {
+            const cf = document.getElementById('prs-delete-cf').value.trim();
+            if (!cf) {
+                document.getElementById('delete-prs-response').textContent = 'Error: CF is required';
+                return;
+            }
+
+            try {
+                const response = await fetch(`/prs/${encodeURIComponent(cf)}`, {
+                    method: 'DELETE'
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }if(response.status_code == 500) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }else{
+                    document.getElementById('delete-prs-response').textContent = 'Delete successful';
+                }
+            } catch (error) {
+                document.getElementById('delete-prs-response').textContent = `Error: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>

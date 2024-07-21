@@ -8,7 +8,7 @@ public class RestClient {
 
 	//modificare questi url
     private static final String PATIENT_RECORD_SERVICE_URL = "http://localhost:8080/prs/patientData/";
-    private static final String DOCTOR_RECORD_SERVICE_URL = "http://localhost:8082/doctorRecordService/rest/drs/doctorData/"; //service still to be created
+    private static final String DOCTOR_RECORD_SERVICE_URL = "http://localhost:8083/doctorRecordService/rest/drs/doctorData/"; //service still to be created
 
     private Client client;
 
