@@ -12,6 +12,7 @@
         <option value="$PROJECT_DIR$/healthcareManagementService/pom.xml" />
         <option value="$PROJECT_DIR$/gateway/pom.xml" />
         <option value="$PROJECT_DIR$/client/pom.xml" />
+        <option value="$PROJECT_DIR$/discoveryServer/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

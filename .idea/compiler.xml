@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="client" />
         <module name="healthcareManagementService" />
+        <module name="discoveryServer" />
         <module name="patientRecordService" />
         <module name="gateway" />
         <module name="medicalHistoryService" />
@@ -23,6 +24,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="appointmentScheduler" options="-parameters" />
       <module name="client" options="-parameters" />
+      <module name="discoveryServer" options="-parameters" />
       <module name="doctorRecordService" options="-parameters" />
       <module name="gateway" options="-parameters" />
       <module name="healthcareManagementService" options="-parameters" />
