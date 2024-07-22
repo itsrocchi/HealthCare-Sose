@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: pswx
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql-init:/docker-entrypoint-initdb.d
+
+  openjob-phpmyadmin:
+    image: phpmyadmin:latest
+    ports:
+      - "5002:80"
+    links:
+      - "openjob-mysql:db"
+    depends_on:
+      - openjob-mysql
+
+  discovery-server:
+    build: ./discoveryServer
+    ports:
+      - "8761:8761"
+
+  gateway:
+    build: ./gateway
+    ports:
+      - "9000:9000"
+    environment:
+      EUREKA_SERVER: http://discovery-server:8761/eureka/
+    depends_on:
+      - discovery-server
+
+  patientRecordService:
+    build: ./patientRecordService
+    ports:
+      - "8080:8080"
+    environment:
+      EUREKA_SERVER: http://discovery-server:8761/eureka/
+      MYSQL_HOST: mysql:3306
+      MYSQL_DB: patient_db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: pswx
+    depends_on:
+      - discovery-server
+      - openjob-mysql
+
+  medicalHistoryService:
+    build: ./medicalHistoryService
+    expose:
+      - "8081:8081"
+    environment:
+      EUREKA_SERVER: http://discovery-server:8761/eureka/
+      MYSQL_HOST: mysql:3306
+      MYSQL_DB: medicalhistory_db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: pswx
+    depends_on:
+      - discovery-server
+      - openjob-mysql
