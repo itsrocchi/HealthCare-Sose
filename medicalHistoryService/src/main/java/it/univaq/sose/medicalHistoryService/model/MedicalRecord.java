@@ -1,7 +1,9 @@
 package it.univaq.sose.medicalHistoryService.model;
 
-import jakarta.persistence.*;
-import java.util.List;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "medical_record")
@@ -12,18 +14,18 @@ public class MedicalRecord {
     private String CF; // Changed to be the primary key
 
     @Column(name = "diseases")
-    private List<String> pastDiseases;
+    private String pastDiseases;
 
     @Column(name = "allergies")
-    private List<String> allergies;
+    private String allergies;
 
 
     @Column(name = "vaccinations")
-    private List<String> vaccinations;
+    private String vaccinations;
 
 
     @Column(name = "medications")
-    private List<String> medications;
+    private String medications;
 
     @Column(name = "notes")
     private String notes;
@@ -40,35 +42,35 @@ public class MedicalRecord {
         this.CF = CF;
     }
 
-    public List<String> getPastDiseases() {
+    public String getPastDiseases() {
         return pastDiseases;
     }
 
-    public void setPastDiseases(List<String> pastDiseases) {
+    public void setPastDiseases(String pastDiseases) {
         this.pastDiseases = pastDiseases;
     }
 
-    public List<String> getAllergies() {
+    public String getAllergies() {
         return allergies;
     }
 
-    public void setAllergies(List<String> allergies) {
+    public void setAllergies(String allergies) {
         this.allergies = allergies;
     }
 
-    public List<String> getVaccinations() {
+    public String getVaccinations() {
         return vaccinations;
     }
 
-    public void setVaccinations(List<String> vaccinations) {
+    public void setVaccinations(String vaccinations) {
         this.vaccinations = vaccinations;
     }
 
-    public List<String> getMedications() {
+    public String getMedications() {
         return medications;
     }
 
-    public void setMedications(List<String> medications) {
+    public void setMedications(String medications) {
         this.medications = medications;
     }
 
