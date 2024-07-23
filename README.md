@@ -1,18 +1,25 @@
-# HealthCare-Sose
-Service Oriented Software Engineering project
+# SOSE Project
+## HealthCare System
+This application consists of a set of services and microservices (both REST and SOAP) made to optimize administrative processes inside a hospital or a clinic.
 
-### todo x bù
+### Prerequisites
+In order to run this project, you should have installed Docker Desktop version 4.32.0
 
-- trasformare _drs_ in un servizio rest cxf (quindi eclipse-based)
-  - rifare quindi le cose swagger
-- (opzionale) gestire le varie eccezioni in modo corretto (ad esempio, se il paziente non esiste, restituire un errore 404 o simili)
-  - questo per tutti i servizi se ti va
-- chiedere e capire se ass e mhs sono considerabili provider o prosumer
-- **divertirsi!!**
+### Installation
 
-### todo dal 17 in poi
+To install the application follow these steps:
+1. Clone the repo:
+   
+   ```sh
+   git clone https://github.com/itsrocchi/HealthCare-Sose
+   ```
+2. Open the terminal and navigate to the folder containing the project;
+3. Run Docker:
 
-- creare microservizi per aggregazione dati e statistiche
-- microservizio per le notifiche
-- servizio login(?)
-- client
+	 ```sh
+   docker compose-up --build
+   ```
+
+Now the project should be up and running, to use the system go to your browser at page 'http://localhost:5000' and have fun!   
+
+Note: If the web app does not start, manually re-starting the AppointmentSchedulingService container should fix everything.
