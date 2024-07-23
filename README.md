@@ -8,13 +8,13 @@ In order to run this project, you should have installed Docker Desktop version 4
 ### Installation
 
 To install the application follow these steps:
-1. Clone the repo
+1. Clone the repo:
    
    ```sh
    git clone https://github.com/itsrocchi/HealthCare-Sose
    ```
-2. Open the terminal and navigate to the folder containing the project
-3. Run Docker
+2. Open the terminal and navigate to the folder containing the project;
+3. Run Docker:
 
 	 ```sh
    docker compose-up --build
