@@ -16,6 +16,7 @@ services:
       - ./mysql-init:/docker-entrypoint-initdb.d
     networks:
       - app-network
+    restart: always
     
 
   openjob-phpmyadmin:
@@ -28,6 +29,7 @@ services:
       - mysql
     networks:
       - app-network
+    restart: always
 
   discovery-server:
     build: ./discoveryServer
@@ -36,6 +38,7 @@ services:
       - "8761:8761"
     networks:
       - app-network
+    restart: always
 
   gateway:
     build:
@@ -49,6 +52,7 @@ services:
       - discovery-server
     networks:
       - app-network
+    restart: always
 
   patientrecordservice:
     build: 
@@ -67,6 +71,7 @@ services:
       - mysql
     networks:
       - app-network
+    restart: always
 
 
   appointmentschedulingservice:
@@ -86,6 +91,7 @@ services:
       - patientrecordservice
     networks:
       - app-network
+    restart: always
 
   doctorrecordservice:
     build:
@@ -98,6 +104,7 @@ services:
       - mysql
     networks:
       - app-network
+    restart: always
 
   medicalhistoryservice:
     build: 
@@ -115,6 +122,7 @@ services:
       - mysql
     networks:
       - app-network
+    restart: always
 
   healthcaremanagementservice:
     build: 
@@ -126,6 +134,7 @@ services:
       - discovery-server
       - patientrecordservice
       - medicalhistoryservice
+    restart: always
 
   webapp:
     build:
