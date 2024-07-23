@@ -1,0 +1,151 @@
+version: '3.9'
+
+networks:
+  app-network:
+    driver: bridge
+
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: pswx
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql-init:/docker-entrypoint-initdb.d
+    networks:
+      - app-network
+    
+
+  openjob-phpmyadmin:
+    image: phpmyadmin:latest
+    ports:
+      - "5002:80"
+    links:
+      - "mysql:db"
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+
+  discovery-server:
+    build: ./discoveryServer
+    container_name: discovery-server
+    ports:
+      - "8761:8761"
+    networks:
+      - app-network
+
+  gateway:
+    build:
+      context: ./gateway
+      dockerfile: ./Dockerfile
+    ports:
+      - "9000:9000"
+    environment:
+      EUREKA_SERVER: http://host.docker.internal:8761/eureka/
+    depends_on:
+      - discovery-server
+    networks:
+      - app-network
+
+  patientrecordservice:
+    build: 
+      context: ./patientRecordService
+      dockerfile: ./Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      EUREKA_SERVER: http://host.docker.internal:8761/eureka/
+      MYSQL_HOST: mysql:3306
+      MYSQL_DB: patient_db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: pswx
+    depends_on:
+      - discovery-server
+      - mysql
+    networks:
+      - app-network
+
+
+  appointmentschedulingservice:
+    build:
+      context: ./appointmentSchedulingService
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8080"
+    environment:
+      MYSQL_HOST: mysql:3306
+      MYSQL_DB: patient_db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: pswx
+    depends_on:
+      - discovery-server
+      - mysql
+      - patientrecordservice
+    networks:
+      - app-network
+
+  doctorrecordservice:
+    build:
+      context: ./doctorRecordService
+      dockerfile: ./Dockerfile
+    ports:
+      - "8082:8080"
+    depends_on:
+      - discovery-server
+      - mysql
+    networks:
+      - app-network
+
+  medicalhistoryservice:
+    build: 
+      context: ./medicalHistoryService
+      dockerfile: ./Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      MYSQL_HOST: mysql:3306
+      MYSQL_DB: medicalhistory_db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: pswx
+    depends_on:
+      - discovery-server
+      - mysql
+    networks:
+      - app-network
+
+  healthcaremanagementservice:
+    build: 
+      context: ./healthcareManagementService
+      dockerfile: ./Dockerfile
+    ports:
+      - "8084:8084"
+    depends_on:
+      - discovery-server
+      - patientrecordservice
+      - medicalhistoryservice
+
+  webapp:
+    build:
+      context: ./app
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./app:/app  # Mount the app directory
+    ports:
+      - "5000:5000"  # Map port 5000 of the container to port 5000 on the host
+    environment:
+      FLASK_APP: app.py
+      FLASK_RUN_HOST: 0.0.0.0
+    depends_on:
+      - gateway
+      - patientrecordservice
+      - appointmentschedulingservice
+      - medicalhistoryservice
+      - discovery-server
+      - mysql
+      - openjob-phpmyadmin
+    networks:
+      - app-network
+    restart: always

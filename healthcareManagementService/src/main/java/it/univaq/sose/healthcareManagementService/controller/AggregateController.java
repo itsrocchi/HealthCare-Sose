@@ -29,13 +29,13 @@ public class AggregateController {
 
     @Async
     public CompletableFuture<ResponseEntity<String>> getPatientData(String cf) {
-        String url = "http://localhost:8080/prs/patientData/" + cf;
+        String url = "http://host.docker.internal:8080/prs/patientData/" + cf;
         return CompletableFuture.supplyAsync(() -> restTemplate.getForEntity(url, String.class));
     }
 
     @Async
     public CompletableFuture<ResponseEntity<String>> getMedicalRecord(String cf) {
-        String url = "http://localhost:8081/mhs/medicalRecord/" + cf;
+        String url = "http://host.docker.internal:8081/mhs/medicalRecord/" + cf;
         return CompletableFuture.supplyAsync(() -> restTemplate.getForEntity(url, String.class));
     }
 

@@ -3,16 +3,15 @@ server:
 
 eureka:
   instance:
-    hostname: localhost
-    prefer-ip-address: true
+    hostname: host.docker.internal
   client:
     registerWithEureka: true
     fetchRegistry: false
     serviceUrl:
-      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+      defaultZone: http://host.docker.internal:${server.port}/eureka/
 
 info:
   application:
-    name: Discovery Server
+    name: discovery-service
     description: Openjob Discovery Server
     version: 0.0.1-SNAPSHOT

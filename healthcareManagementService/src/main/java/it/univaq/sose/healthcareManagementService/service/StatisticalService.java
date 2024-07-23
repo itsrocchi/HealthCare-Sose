@@ -1,12 +1,11 @@
 package it.univaq.sose.healthcareManagementService.service;
 
-import it.univaq.sose.medicalHistoryService.model.MedicalRecord;
-import it.univaq.sose.patientRecordService.model.Gender;
-import it.univaq.sose.patientRecordService.model.Patient;
+import it.univaq.sose.healthcareManagementService.model.Gender;
+import it.univaq.sose.healthcareManagementService.model.MedicalRecord;
+import it.univaq.sose.healthcareManagementService.model.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-//import org.springframework.ws.client.core.WebServiceTemplate;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,13 +21,13 @@ public class StatisticalService {
     //private WebServiceTemplate soapTemplate;
 
     public List<Patient> getAllPatients() {
-        String url = "http://localhost:8080/prs/patientData";
+        String url = "http://host.docker.internal:8080/prs/patientData";
         Patient[] patients = restTemplate.getForObject(url, Patient[].class);
         return Arrays.asList(patients);
     }
 
     public List<MedicalRecord> getAllMedicalRecords() {
-        String url = "http://localhost:8081/mhs/medicalRecord";
+        String url = "http://host.docker.internal:8081/mhs/medicalRecord";
         MedicalRecord[] medicalRecords = restTemplate.getForObject(url, MedicalRecord[].class);
         return Arrays.asList(medicalRecords);
     }

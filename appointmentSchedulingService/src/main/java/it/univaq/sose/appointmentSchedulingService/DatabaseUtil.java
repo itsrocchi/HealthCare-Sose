@@ -13,7 +13,7 @@ public class DatabaseUtil {
             // Load H2 driver
             Class.forName("com.mysql.cj.jdbc.Driver");
 
-            try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/appointments_db", "root", "pswx");
+            try (Connection conn = DriverManager.getConnection("jdbc:mysql://mysql:3306/appointments_db", "root", "pswx");
                  Statement stmt = conn.createStatement()) {
 
                 // Load schema.sql

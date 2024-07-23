@@ -12,7 +12,7 @@ public class DatabaseUtil {
 	        // Load H2 driver
 	        //Class.forName("org.h2.Driver");
 
-	        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/doctors_db", "root", "pswx");
+	        try (Connection conn = DriverManager.getConnection("jdbc:mysql://mysql:3306/doctors_db", "root", "pswx");
 	             Statement stmt = conn.createStatement()) {
 
 	            // Load schema.sql

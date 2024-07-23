@@ -19,8 +19,8 @@ public class InsertService {
 
     public boolean processPatientData(PatientData patientData) throws PatientNotFoundException {
         String cf = patientData.getCf();
-        String getPatientDataUrl = "http://localhost:8080/prs/patientData/" + cf;
-        String checkMedicalRecordUrl = "http://localhost:8081/mhs/medicalRecord/" + cf;
+        String getPatientDataUrl = "http://host.docker.internal:8080/prs/patientData/" + cf;
+        String checkMedicalRecordUrl = "http://host.docker.internal:8081/mhs/medicalRecord/" + cf;
 
         try {
             // Check if patient exists in Patient Record Service
@@ -42,7 +42,7 @@ public class InsertService {
                 }
 
                 // If the data does not exist, perform POST request to insert patient data
-                String postMedicalRecordUrl = "http://localhost:8081/mhs/medicalRecord";
+                String postMedicalRecordUrl = "http://host.docker.internal:8081/mhs/medicalRecord";
                 ResponseEntity<String> postResponse = restTemplate.postForEntity(postMedicalRecordUrl, patientData, String.class);
                 return postResponse.getStatusCode().is2xxSuccessful();
             } else {
@@ -64,8 +64,8 @@ public class InsertService {
 
     public boolean updatePatientData(PatientData patientData) throws PatientNotFoundException {
         String cf = patientData.getCf();
-        String getPatientDataUrl = "http://localhost:8080/prs/patientData/" + cf;
-        String putMedicalRecordUrl = "http://localhost:8081/mhs/medicalRecord/" + cf;
+        String getPatientDataUrl = "http://host.docker.internal:8080/prs/patientData/" + cf;
+        String putMedicalRecordUrl = "http://host.docker.internal:8081/mhs/medicalRecord/" + cf;
 
         try {
             // Check if patient exists in Patient Record Service

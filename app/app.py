@@ -6,12 +6,12 @@ from zeep.exceptions import Fault
 app = Flask(__name__)
 
 # Define base URLs for REST services
-BASE_URL_PRS = 'http://172.27.64.1:9000/prs'
-BASE_URL_DRS = 'http://172.27.64.1:9000/drs'
-BASE_URL_HMS = 'http://172.27.64.1:8084/hms'
+BASE_URL_PRS = 'http://host.docker.internal:9000/prs'
+BASE_URL_DRS = 'http://host.docker.internal:9000/drs'
+BASE_URL_HMS = 'http://host.docker.internal:8084/hms'
 
 # Define the URL for the SOAP service
-SOAP_URL = 'http://172.27.64.1:8083/appointmentSchedulingService/ass?wsdl'
+SOAP_URL = 'http://host.docker.internal:8083/ass?wsdl'
 soap_client = Client(SOAP_URL)
 
 @app.route('/')
