@@ -21,3 +21,5 @@ To install the application follow these steps:
    ```
 
 Now the project should be up and running, to use the system go to your browser at page 'http://localhost:5000' and have fun!   
+
+Note: If the web app does not start, manually re-starting the AppointmentSchedulingService container should fix everything.
