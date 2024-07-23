@@ -1,0 +1,6 @@
+it\univaq\sose\doctorRecordService\util\AppInitializer.class
+it\univaq\sose\doctorRecordService\DoctorRecord.class
+it\univaq\sose\doctorRecordService\DoctorRecordImpl.class
+it\univaq\sose\doctorRecordService\util\H2Console.class
+it\univaq\sose\doctorRecordService\model\Doctor.class
+it\univaq\sose\doctorRecordService\util\DatabaseUtil.class

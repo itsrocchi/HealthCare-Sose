@@ -1,0 +1,8 @@
+it\univaq\sose\appointmentSchedulingService\SimpleCXFNonSpringServlet.class
+it\univaq\sose\appointmentSchedulingService\AppointmentService.class
+it\univaq\sose\appointmentSchedulingService\SimpleCXFNonSpringServlet$1.class
+it\univaq\sose\appointmentSchedulingService\H2Console.class
+it\univaq\sose\appointmentSchedulingService\Appointment.class
+it\univaq\sose\appointmentSchedulingService\RestClient.class
+it\univaq\sose\appointmentSchedulingService\AppointmentServiceImpl.class
+it\univaq\sose\appointmentSchedulingService\DatabaseUtil.class

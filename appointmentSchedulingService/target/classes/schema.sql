@@ -1,0 +1,1 @@
+CREATE TABLE appointments (app_id VARCHAR(255) PRIMARY KEY, patient_cf VARCHAR(255) NOT NULL, doctor_id VARCHAR(255) NOT NULL, appointment_datetime VARCHAR(255) NOT NULL, info VARCHAR(255) NOT NULL, status VARCHAR(255) NOT NULL);
